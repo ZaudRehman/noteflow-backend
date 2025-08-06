@@ -5,7 +5,7 @@ from datetime import datetime
 from app.models import get_user_by_email, insert_user
 from app.utils.auth import create_access_token
 
-router = APIRouter(prefix="/auth", tags=["auth"])
+router = APIRouter(tags=["auth"])
 
 @router.post("/register")
 async def register_user(email: Annotated[str, Body()], password: Annotated[str, Body()]):

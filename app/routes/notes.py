@@ -5,7 +5,7 @@ from app.models import insert_note, list_user_notes, get_note_by_id, update_note
 from app.utils.auth import get_current_user
 from datetime import datetime
 
-router = APIRouter(prefix="/notes", tags=["notes"])
+router = APIRouter(tags=["notes"])
 
 @router.post("/create")
 async def create_note(title: Annotated[str, Body()], content: Annotated[str, Body()], current_user: Annotated[str, Depends(get_current_user)]):

@@ -14,7 +14,7 @@ app.add_middleware(
 
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
 app.include_router(notes.router, prefix="/notes", tags=["notes"])
-app.include_router(websocket.router, prefix="/ws", tags=["websocket"])
+app.include_router(websocket.router, tags=["websocket"])
 
 # Optionally, add a root endpoint to verify API health
 @app.get("/")
