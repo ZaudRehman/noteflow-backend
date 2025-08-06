@@ -12,6 +12,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth.router)
-app.include_router(notes.router)
-app.include_router(websocket.router)
+app.include_router(auth.router, prefix="/auth", tags=["auth"])
+app.include_router(notes.router, prefix="/notes", tags=["notes"])
+app.include_router(websocket.router, prefix="/ws", tags=["websocket"])
+
+# Optionally, add a root endpoint to verify API health
+@app.get("/")
+async def root():
+    return {"message": "Welcome to NoteFlow-backend!"}
