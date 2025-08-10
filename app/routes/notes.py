@@ -4,13 +4,13 @@ from app.models import insert_note, list_user_notes, get_note_by_id, update_note
 from app.utils.auth import get_current_user
 from datetime import datetime
 
-router = APIRouter(tags=["notes"])  # No prefix here!
+router = APIRouter(tags=["notes"])  
 
 @router.post("/create")
 async def create_note(
     title: Annotated[str, Body()],
     content: Annotated[str, Body()],
-    current_user: Annotated[str, Depends(get_current_user)]
+    current_user: Annotated[str, Depends(get_current_user)],
 ):
     note = {
         "title": title,
@@ -26,8 +26,9 @@ async def create_note(
 @router.get("/list")
 async def notes_list(current_user: Annotated[str, Depends(get_current_user)]):
     notes = list_user_notes(current_user)
+    # Convert ObjectIds to strings for frontend compatibility
     for note in notes:
-        note["_id"] = str(note["_id"])  
+        note["_id"] = str(note["_id"])
     return notes
 
 @router.put("/update/{note_id}")
@@ -35,7 +36,7 @@ async def update_note_route(
     note_id: str,
     title: Annotated[str, Body()],
     content: Annotated[str, Body()],
-    current_user: Annotated[str, Depends(get_current_user)]
+    current_user: Annotated[str, Depends(get_current_user)],
 ):
     note = get_note_by_id(note_id)
     if note is None:
@@ -53,13 +54,16 @@ async def update_note_route(
         "title": title,
         "content": content,
         "updated_at": datetime.utcnow(),
-        "history": note.get("history", []) + [history_item],  
+        "history": note.get("history", []) + [history_item], 
     })
 
     return {"message": "Note updated successfully"}
 
 @router.delete("/delete/{note_id}")
-async def delete_note_route(note_id: str, current_user: Annotated[str, Depends(get_current_user)]):
+async def delete_note_route(
+    note_id: str,
+    current_user: Annotated[str, Depends(get_current_user)],
+):
     note = get_note_by_id(note_id)
     if note is None:
         raise HTTPException(status_code=404, detail="Note not found")
